@@ -1,10 +1,32 @@
-node {
-  stage 'Building image'
-  git '…'
-  def newApp = docker.build "shred22/docker-regservice:1.0"
-  newApp.push() // record this snapshot (optional)
-  stage 'Test image'
-  // run some tests on it (see below), then if everything looks good:
-  stage 'Approve image'
-  newApp.push 'latest'
+#!groovy
+
+pipeline {
+  agent none
+  stages {
+    stage('Maven Install') {
+      agent {
+        docker {
+          image 'maven:3.5.0'
+        }
+      }
+      steps {
+        sh 'mvn clean install'
+      }
+    }
+    stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t shred22/docker-productservice:latest .'
+      }
+    }
+    stage('Docker Push') {
+      agent any
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push shred22/docker-productservice:latest'
+        }
+      }
+    }
+  }
 }
