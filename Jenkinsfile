@@ -28,7 +28,6 @@ pipeline {
         stage('Integration Test') {
              steps {
                   configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                       sh 'docker-compose up -d'
                        sh 'mvn clean test -DskipTests'
                   }
 
