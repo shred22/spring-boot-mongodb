@@ -17,9 +17,12 @@ pipeline {
 
         stage('Build With Unit Tests') {
                     steps {
+                    node {
+                       def productserviceApp = docker.build "shred22/docker-productservice:latest";
+                       productserviceApp.push()
+                    }
                      configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
-                     def productserviceApp = docker.build "shred22/docker-productservice:latest";
-                     productserviceApp.push()
+
                             sh 'mvn -version'
                             sh 'mvn clean test -DskipTests'
                      }
