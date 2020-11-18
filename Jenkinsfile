@@ -16,21 +16,12 @@ pipeline {
     stages {
 
         stage('Build With Unit Tests') {
-                    steps {
-                    node {
-                       def productserviceApp = docker.build "shred22/docker-productservice:latest";
-                       productserviceApp.push()
-                    }
-                     configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
+            myImage = docker.image("shred22/docker-productservice:1.0")
+            myImage.build()
+            myImage.push()
+         }
 
-                            sh 'mvn -version'
-                            sh 'mvn clean test -DskipTests'
-                     }
-                        
-                    }
-                }
-
-        stage('Integration Test') {
+       /*  stage('Integration Test') {
              steps {
                   configFileProvider([configFile(fileId: "maven-settings-file", variable: 'MAVEN_SETTINGS')]) {
                        sh 'mvn clean test -DskipTests'
@@ -58,5 +49,5 @@ pipeline {
                          }
                        }
                 }
-    }
+    } */
 }
