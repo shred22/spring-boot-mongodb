@@ -1,0 +1,11 @@
+server:
+  port: 8085
+
+# Mongo DB Properties
+spring:
+  data:
+    mongodb:
+      host: docker-mongo
+      port: 27017
+      uri: mongodb://docker-mongo:27017
+

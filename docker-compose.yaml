@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  docker-mongo:
+    image: mongo
+    container_name: docker-mongo
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+    networks:
+      mongoapp-network:
+    volumes:
+      - type: volume
+        source: mongodata
+        target: /data/db
+
+  docker-productservice:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: docker-productservice
+    networks:
+      mongoapp-network:
+    depends_on:
+      - docker-mongo
+    ports:
+      - '8085:8085'
+    restart: always
+
+networks:
+  mongoapp-network:
+volumes:
+  mongodata:
+
+secrets:
+  mysql_db_password:
+    external: true
+  mysql_db_username:
+    external: true
+  mysql_db_name:
+    external: true
