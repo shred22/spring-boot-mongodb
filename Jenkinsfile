@@ -16,9 +16,14 @@ pipeline {
     stages {
 
         stage('Build With Unit Tests') {
-            myImage = docker.image("shred22/docker-productservice:1.0")
-            myImage.build()
-            myImage.push()
+          steps {
+            script {
+             myImage = docker.image("shred22/docker-productservice:1.0")
+                        myImage.build()
+                        myImage.push()
+            }
+          }
+
          }
 
        /*  stage('Integration Test') {
