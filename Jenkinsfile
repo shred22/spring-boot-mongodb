@@ -20,7 +20,8 @@ pipeline {
       }
     }
       stage('SSH transfer to Ansible Controller Node') {
-        steps([$class: 'BapSshPromotionPublisherPlugin']) {
+        agent {
+          steps([$class: 'BapSshPromotionPublisherPlugin']) {
             sshPublisher(
               continueOnError: false, 
               failOnError: true,
@@ -33,7 +34,8 @@ pipeline {
                 )
               ]
            )
-        }
+          }
+       }
     }    
   }
 }
