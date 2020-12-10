@@ -38,8 +38,8 @@ pipeline {
                         verbose: true,
                         transfers: [
                             //sshTransfer(execCommand: "/bin/rm -rf /opt/deploy/helm"),
-                            sshTransfer(sourceFiles: "Dockerfile","docker-compose.yaml",
-                            remoteDirectory: "/home/osboxes")
+                            sshTransfer(sourceFiles: "Dockerfile","docker-compose.yaml"),
+                            sshTransfer(remoteDirectory: "/home/osboxes")
                             
                         ]
                     )
@@ -47,5 +47,6 @@ pipeline {
             )
         }
     }
+    
   }
 }
