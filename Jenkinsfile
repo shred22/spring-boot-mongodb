@@ -19,15 +19,6 @@ pipeline {
         sh 'docker build -t shred22/docker-productservice:latest .'
       }
     }
-    stage('Docker Push') {
-      agent any
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push shred22/docker-productservice:latest'
-        }
-      }
-    }
       stage('SSH transfer to Ansible Controller Node') {
         steps([$class: 'BapSshPromotionPublisherPlugin']) {
             sshPublisher(
