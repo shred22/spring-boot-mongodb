@@ -22,22 +22,18 @@ pipeline {
       stage('SSH transfer to Ansible Controller Node') {
         steps([$class: 'BapSshPromotionPublisherPlugin']) {
             sshPublisher(
-                continueOnError: false, failOnError: true,
-                publishers: [
-                    sshPublisherDesc(
-                        configName: "ansible-master",
-                        verbose: true,
-                        transfers: [
-                            //sshTransfer(execCommand: "/bin/rm -rf /opt/deploy/helm"),
-                            sshTransfer(sourceFiles: "Dockerfile","docker-compose.yaml"),
-                            sshTransfer(remoteDirectory: "/home/osboxes")
-                            
-                        ]
-                    )
-                ]
-            )
+              continueOnError: false, 
+              failOnError: true,
+              publishers: [
+                sshPublisherDesc(
+                  configName: "ansible-master",
+                  transfers: [sshTransfer(sourceFiles: "Dockerfile"),
+                            sshTransfer(remoteDirectory: "/home/osboxes")],
+                  verbose: true
+                )
+              ]
+           )
         }
-    }
-    
+    }    
   }
 }
