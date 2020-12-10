@@ -22,20 +22,16 @@ pipeline {
       stage('SSH transfer to Ansible Controller Node') {
         agent any
           steps([$class: 'BapSshPromotionPublisherPlugin']) {
-            sshPublisher(
-              continueOnError: false, 
-              failOnError: true,
-              publishers: [
-                sshPublisherDesc(
-                  configName: "ansible-master",
-                  transfers: [sshTransfer(sourceFiles: "Dockerfile"),
-                            sshTransfer(remoteDirectory: "/home/osboxes")],
-                  verbose: true
-                )
-              ]
-           )
+          sshPublisher(publishers: [sshPublisherDesc(configName: 'ansible-master', 
+          transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''cd //home/osboxes/Ansible docker-compose build
+          docker-compose up''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
+          remoteDirectory: '//home//osboxes//Ansible', 
+          remoteDirectorySDF: false, removePrefix: '', 
+          sourceFiles: 'Dockerfile,docker-compose.yaml')], 
+          usePromotionTimestamp: false, 
+          useWorkspaceInPromotion: false, 
+          verbose: true)])
           }
-       
     }    
   }
 }
