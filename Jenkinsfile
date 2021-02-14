@@ -2,7 +2,7 @@
 
 pipeline {
   agent {
-    java-docker-slave
+    label java-docker-slave
   }
   stages {
     stage('Maven Install') {
